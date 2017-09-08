@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Category;
-use AppBundle\Entity\Todo;
-use AppBundle\Transformer\TodoTransformer;
+use ApiBundle\Entity\Category;
+use ApiBundle\Entity\Todo;
+use ApiBundle\Transformer\TodoTransformer;
 use Carbon\Carbon;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TodoController extends BaseController
@@ -15,13 +15,13 @@ class TodoController extends BaseController
     {
         $todos = $this->getRepo(Todo::class)->findAll();
 
-        return new JsonResponse(new TodoTransformer($todos), 200);
+        return (new TodoTransformer($todos))->response(200);
     }
 
     public function storeAction(Request $request)
     {
         $todo = new Todo();
-        $todo->setName($request->request->get('name'));
+        $todo->setTitle($request->request->get('title'));
         $categories = $request->request->get('categories');
 
         foreach ($categories as $categoryId) {
@@ -40,7 +40,7 @@ class TodoController extends BaseController
         $this->getEm()->persist($todo);
         $this->getEm()->flush();
 
-        return new JsonResponse(new TodoTransformer($todo), 200);
+        return (new TodoTransformer($todo))->response(201);
     }
 
     public function showAction($id)
@@ -51,7 +51,7 @@ class TodoController extends BaseController
             return new JsonResponse([], 404);
         }
 
-        return new JsonResponse(new TodoTransformer($todo), 200);
+        return (new TodoTransformer($todo))->response(200);
     }
 
     public function updateAction(Request $request, $id)
@@ -62,7 +62,7 @@ class TodoController extends BaseController
             return new JsonResponse([], 404);
         }
 
-        $todo->setName($request->request->get('name'));
+        $todo->setTitle($request->request->get('title'));
         $todo->setModified(Carbon::now());
 
         $categories = $request->request->get('categories');
@@ -83,7 +83,7 @@ class TodoController extends BaseController
         $this->getEm()->persist($todo);
         $this->getEm()->flush();
 
-        return new JsonResponse(new TodoTransformer($todo), 200);
+        return (new TodoTransformer($todo))->response(200);
     }
 
     public function destroyAction($id)

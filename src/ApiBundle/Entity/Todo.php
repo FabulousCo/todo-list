@@ -1,18 +1,22 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace ApiBundle\Entity;
 
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\JoinTable;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * Category
+ * Todo
  *
- * @ORM\Table(name="category")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @ORM\Table(name="todo")
+ * @ORM\Entity(repositoryClass="ApiBundle\Repository\TodoRepository")
+ * @UniqueEntity("title")
  */
-class Category
+class Todo
 {
     /**
      * @var int
@@ -26,7 +30,7 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
      * @Assert\NotNull()
      * @Assert\Type(
      *     type="string",
@@ -39,7 +43,14 @@ class Category
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
      * )
      */
-    private $name;
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", columnDefinition="ENUM('open','done')")
+     */
+    private $status;
 
     /**
      * @var \DateTime
@@ -51,18 +62,20 @@ class Category
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="modified", type="datetime")
+     * @ORM\Column(name="modified", type="datetime", nullable=true)
      */
     private $modified;
 
     /**
-     * Many Categories have Many Todos.
-     * @ManyToMany(targetEntity="Todo", mappedBy="groups")
+     * Many Todos have Many Categories.
+     * @ManyToMany(targetEntity="Category", inversedBy="todos")
+     * @JoinTable(name="todos_categories")
      */
-    private $todos;
+    private $categories;
 
-    public function __construct() {
-        $this->todos = new \Doctrine\Common\Collections\ArrayCollection();
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = Carbon::now();
     }
 
@@ -77,27 +90,51 @@ class Category
     }
 
     /**
-     * Set name
+     * Set title
      *
-     * @param string $name
+     * @param string $title
      *
-     * @return Category
+     * @return Todo
      */
-    public function setName($name)
+    public function setTitle($title)
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get title
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Todo
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -115,7 +152,7 @@ class Category
      *
      * @param \DateTime $modified
      *
-     * @return Category
+     * @return Todo
      */
     public function setModified($modified)
     {
@@ -132,6 +169,16 @@ class Category
     public function getModified()
     {
         return $this->modified;
+    }
+
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
 

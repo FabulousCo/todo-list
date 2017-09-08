@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace ApiBundle\Controller;
 
-use AppBundle\Entity\Category;
-use AppBundle\Transformer\CategoryTransformer;
+use ApiBundle\Entity\Category;
+use ApiBundle\Transformer\CategoryTransformer;
 use Carbon\Carbon;
-use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
 {
@@ -14,7 +14,7 @@ class CategoryController extends BaseController
     {
         $categories = $this->getRepo(Category::class)->findAll();
 
-        return new JsonResponse(new CategoryTransformer($categories), 200);
+        return (new CategoryTransformer($categories))->response(200);
     }
 
     public function storeAction(Request $request)
@@ -32,7 +32,7 @@ class CategoryController extends BaseController
         $this->getEm()->persist($category);
         $this->getEm()->flush();
 
-        return new JsonResponse(new CategoryTransformer($category), 200);
+        return (new CategoryTransformer($category))->response(201);
     }
 
     public function showAction($id)
@@ -43,7 +43,7 @@ class CategoryController extends BaseController
             return new JsonResponse([], 404);
         }
 
-        return new JsonResponse(new CategoryTransformer($category), 200);
+        return (new CategoryTransformer($category))->response(200);
     }
 
     public function updateAction(Request $request, $id)
@@ -67,7 +67,7 @@ class CategoryController extends BaseController
         $this->getEm()->persist($category);
         $this->getEm()->flush();
 
-        return new JsonResponse(new CategoryTransformer($category), 200);
+        return (new CategoryTransformer($category))->response(200);
     }
 
     public function destroyAction($id)

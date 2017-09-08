@@ -1,0 +1,61 @@
+TodosIndex:
+    path:     /todos
+    defaults: { _controller: ApiBundle:Todo:index }
+    methods: [GET]
+
+TodosStore:
+    path:     /todos
+    defaults: { _controller: ApiBundle:Todo:store }
+    methods: [POST]
+
+TodosShow:
+    path:     /todos/{id}
+    defaults: { _controller: ApiBundle:Todo:show }
+    methods: [GET]
+    requirements:
+        id: \d+
+
+TodosUpdate:
+    path:     /todos/{id}
+    defaults: { _controller: ApiBundle:Todo:update }
+    methods: [PUT]
+    requirements:
+        id: \d+
+
+TodosDestroy:
+    path:     /todos/{id}
+    defaults: { _controller: ApiBundle:Todo:destroy }
+    methods: [DELETE]
+    requirements:
+        id: \d+
+
+CategoriesIndex:
+    path:     /categories
+    defaults: { _controller: ApiBundle:Category:index }
+    methods: [GET]
+
+CategoriesStore:
+    path:     /categories
+    defaults: { _controller: ApiBundle:Category:store }
+    methods: [POST]
+
+CategoriesShow:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:Category:show }
+    methods: [GET]
+    requirements:
+        id: \d+
+
+CategoriesUpdate:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:Category:update }
+    methods: [PUT]
+    requirements:
+        id: \d+
+
+CategoriesDestroy:
+    path:     /categories/{id}
+    defaults: { _controller: ApiBundle:Category:destroy }
+    methods: [DELETE]
+    requirements:
+        id: \d+
