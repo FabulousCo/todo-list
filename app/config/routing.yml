@@ -3,6 +3,8 @@ api:
     resource: "@ApiBundle/Resources/config/routing.yml"
 
 app:
-    prefix: '/'
+    prefix: '/{any}'
     resource: '@AppBundle/Controller/'
     type:     annotation
+    requirements:
+        any: .*

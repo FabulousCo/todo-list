@@ -73,10 +73,14 @@ class Todo
      */
     private $categories;
 
+    /**
+     * Todo constructor.
+     */
     public function __construct()
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = Carbon::now();
+        $this->status = 'open';
     }
 
     /**
@@ -171,11 +175,23 @@ class Todo
         return $this->modified;
     }
 
+    /**
+     * @param Category $category
+     *
+     * @return Todo;
+     */
     public function addCategory(Category $category)
     {
+        if ($this->categories->contains($category)) return $this;
+
         $this->categories[] = $category;
+
+        return $this;
     }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
     public function getCategories()
     {
         return $this->categories;

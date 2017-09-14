@@ -9,8 +9,17 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Class TodoController
+ * @package ApiBundle\Controller
+ */
 class TodoController extends BaseController
 {
+    /**
+     * Get a collection of all the existing todos
+     *
+     * @return JsonResponse
+     */
     public function indexAction()
     {
         $todos = $this->getRepo(Todo::class)->findAll();
@@ -18,6 +27,12 @@ class TodoController extends BaseController
         return (new TodoTransformer($todos))->response(200);
     }
 
+    /**
+     * Create a todo with the data sent in the request
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function storeAction(Request $request)
     {
         $todo = new Todo();
@@ -43,6 +58,12 @@ class TodoController extends BaseController
         return (new TodoTransformer($todo))->response(201);
     }
 
+    /**
+     * Show the todo having the id given in param
+     *
+     * @param $id
+     * @return JsonResponse
+     */
     public function showAction($id)
     {
         $todo = $this->getRepo(Todo::class)->find($id);
@@ -54,6 +75,13 @@ class TodoController extends BaseController
         return (new TodoTransformer($todo))->response(200);
     }
 
+    /**
+     * Update the todo having the id given in param
+     *
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
     public function updateAction(Request $request, $id)
     {
         $todo = $this->getRepo(Todo::class)->find($id);
@@ -86,6 +114,12 @@ class TodoController extends BaseController
         return (new TodoTransformer($todo))->response(200);
     }
 
+    /**
+     * Delete the todo having the id given in param
+     *
+     * @param $id
+     * @return JsonResponse
+     */
     public function destroyAction($id)
     {
         $todo = $this->getRepo(Todo::class)->find($id);

@@ -60,7 +60,7 @@ class Category
 
     /**
      * Many Categories have Many Todos.
-     * @ManyToMany(targetEntity="Todo", mappedBy="groups")
+     * @ManyToMany(targetEntity="Todo", mappedBy="categories")
      */
     private $todos;
 

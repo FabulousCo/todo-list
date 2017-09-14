@@ -2,8 +2,16 @@
 
 namespace ApiBundle\Transformer;
 
+/**
+ * Class CategoryTransformer
+ * @package ApiBundle\Transformer
+ */
 class CategoryTransformer extends BaseTransformer
 {
+    /**
+     * @param $category
+     * @return array
+     */
     public function transform($category)
     {
         return [

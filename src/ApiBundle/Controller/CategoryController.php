@@ -8,8 +8,17 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class CategoryController
+ * @package ApiBundle\Controller
+ */
 class CategoryController extends BaseController
 {
+    /**
+     * Get a collection of all the existing categories
+     *
+     * @return JsonResponse
+     */
     public function indexAction()
     {
         $categories = $this->getRepo(Category::class)->findAll();
@@ -17,6 +26,12 @@ class CategoryController extends BaseController
         return (new CategoryTransformer($categories))->response(200);
     }
 
+    /**
+     * Create a category with the data sent in the request
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function storeAction(Request $request)
     {
         $category = new Category();
@@ -35,6 +50,12 @@ class CategoryController extends BaseController
         return (new CategoryTransformer($category))->response(201);
     }
 
+    /**
+     * Show the category having the id given in param
+     *
+     * @param $id
+     * @return JsonResponse
+     */
     public function showAction($id)
     {
         $category = $this->getRepo(Category::class)->find($id);
@@ -46,6 +67,13 @@ class CategoryController extends BaseController
         return (new CategoryTransformer($category))->response(200);
     }
 
+    /**
+     * Update the category having the id given in param
+     *
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
     public function updateAction(Request $request, $id)
     {
         $category = $this->getRepo(Category::class)->find($id);
@@ -70,6 +98,12 @@ class CategoryController extends BaseController
         return (new CategoryTransformer($category))->response(200);
     }
 
+    /**
+     * Delete the category having the id given in param
+     *
+     * @param $id
+     * @return JsonResponse
+     */
     public function destroyAction($id)
     {
         $category = $this->getRepo(Category::class)->find($id);
